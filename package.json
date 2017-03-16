@@ -1,0 +1,31 @@
+{
+  "name": "networksetup-proxy",
+  "version": "0.0.1",
+  "author": "@kyo_ago",
+  "bugs": {
+    "url": "https://github.com/kyo-ago/networksetup-proxy/issues"
+  },
+  "devDependencies": {},
+  "homepage": "https://github.com/kyo-ago/networksetup-proxy/",
+  "keywords": [
+    "proxy",
+    "networksetup",
+    "osx",
+    "os x",
+    "network",
+    "electron"
+  ],
+  "license": "GPL-3.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyo-ago/networksetup-proxy.git"
+  },
+  "scripts": {
+    "build": "cd ./rust/ && rm -f proxy-setting && rustc proxy-setting.rs",
+    "postinstall": "curl -sSf https://static.rust-lang.org/rustup.sh | sh"
+  },
+  "dependencies": {
+    "electron-sudo": "^4.0.12"
+  }
+}

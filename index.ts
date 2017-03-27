@@ -1,13 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require("fs");
-const child_process_1 = require("child_process");
-const electron_sudo_1 = require("electron-sudo");
-class NetworksetupProxy {
-    constructor() {
-        this.PROXY_SETTING_COMMAND = `./rust/proxy-setting`;
-    }
-    grant() {
+import * as fs from "fs";
+import {exec} from "child_process";
+import Sudoer from "electron-sudo";
+
+export type IOResult = Promise<{
+    stdout: string;
+    stderr: string;
+}>;
+
+export class NetworksetupProxy {
+    private PROXY_SETTING_COMMAND = `./rust/proxy-setting`;
+    grant(): IOResult {
         return new Promise((resolve, reject) => {
             fs.chmod(this.PROXY_SETTING_COMMAND, `4755`, (err) => {
                 if (err) {
@@ -16,11 +18,11 @@ class NetworksetupProxy {
                 resolve();
             });
         }).then(() => {
-            const sudoer = new electron_sudo_1.default({ name: 'electron sudo application' });
+            const sudoer = new Sudoer({name: 'electron sudo application'});
             return sudoer.exec(`chown 0:0 ${this.PROXY_SETTING_COMMAND}`);
         });
     }
-    hasGrant() {
+    hasGrant(): IOResult {
         return new Promise((resolve, reject) => {
             fs.stat(this.PROXY_SETTING_COMMAND, (err, stats) => {
                 if (err) {
@@ -30,28 +32,26 @@ class NetworksetupProxy {
             });
         });
     }
-    setwebproxy(networkservice, domain, port, authenticated, username, password) {
+    setwebproxy(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): IOResult {
         return this.exec(`-setwebproxy`, [networkservice, domain, port, authenticated, username, password]);
     }
-    setsecurewebproxy(networkservice, enabled) {
+    setsecurewebproxy(networkservice: string, enabled: string): IOResult {
         return this.exec(`-setwebproxy`, [networkservice, enabled]);
     }
-    setwebproxystate(networkservice, domain, port, authenticated, username, password) {
+    setwebproxystate(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): IOResult {
         return this.exec(`-setwebproxy`, [networkservice, domain, port, authenticated, username, password]);
     }
-    setsecurewebproxystate(networkservice, enabled) {
+    setsecurewebproxystate(networkservice: string, enabled: string): IOResult {
         return this.exec(`-setwebproxy`, [networkservice, enabled]);
     }
-    exec(command, params) {
+    private exec(command: string, params: string[]): IOResult {
         return new Promise((resolve, reject) => {
-            child_process_1.exec(`${command} ${params.join(' ')}`, (error, stdout, stderr) => {
+            exec(`${command} ${params.join(' ')}`, (error, stdout, stderr) => {
                 if (error && !stderr) {
                     return reject(error);
                 }
-                resolve({ stdout, stderr });
+                resolve({stdout, stderr});
             });
         });
     }
 }
-exports.NetworksetupProxy = NetworksetupProxy;
-;

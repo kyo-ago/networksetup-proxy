@@ -9,7 +9,7 @@ export type IOResult = Promise<{
 
 export class NetworksetupProxy {
     private PROXY_SETTING_COMMAND = `./rust/proxy-setting`;
-    grant(): IOResult {
+    grant(): Promise<any> {
         return new Promise((resolve, reject) => {
             fs.chmod(this.PROXY_SETTING_COMMAND, `4755`, (err) => {
                 if (err) {
@@ -22,7 +22,7 @@ export class NetworksetupProxy {
             return sudoer.exec(`chown 0:0 ${this.PROXY_SETTING_COMMAND}`);
         });
     }
-    hasGrant(): IOResult {
+    hasGrant(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             fs.stat(this.PROXY_SETTING_COMMAND, (err, stats) => {
                 if (err) {
@@ -32,19 +32,19 @@ export class NetworksetupProxy {
             });
         });
     }
-    setwebproxy(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): IOResult {
+    setwebproxy(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): Promise<IOResult> {
         return this.exec(`-setwebproxy`, [networkservice, domain, port, authenticated, username, password]);
     }
-    setsecurewebproxy(networkservice: string, enabled: string): IOResult {
-        return this.exec(`-setwebproxy`, [networkservice, enabled]);
+    setsecurewebproxy(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): Promise<IOResult> {
+        return this.exec(`-setsecurewebproxy`, [networkservice, domain, port, authenticated, username, password]);
     }
-    setwebproxystate(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): IOResult {
-        return this.exec(`-setwebproxy`, [networkservice, domain, port, authenticated, username, password]);
+    setwebproxystate(networkservice: string, enabled: string): Promise<IOResult> {
+        return this.exec(`-setwebproxystate`, [networkservice, enabled]);
     }
-    setsecurewebproxystate(networkservice: string, enabled: string): IOResult {
-        return this.exec(`-setwebproxy`, [networkservice, enabled]);
+    setsecurewebproxystate(networkservice: string, enabled: string): Promise<IOResult> {
+        return this.exec(`-setsecurewebproxystate`, [networkservice, enabled]);
     }
-    private exec(command: string, params: string[]): IOResult {
+    private exec(command: string, params: string[]): Promise<IOResult> {
         return new Promise((resolve, reject) => {
             exec(`${command} ${params.join(' ')}`, (error, stdout, stderr) => {
                 if (error && !stderr) {

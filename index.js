@@ -33,14 +33,14 @@ class NetworksetupProxy {
     setwebproxy(networkservice, domain, port, authenticated, username, password) {
         return this.exec(`-setwebproxy`, [networkservice, domain, port, authenticated, username, password]);
     }
-    setsecurewebproxy(networkservice, enabled) {
-        return this.exec(`-setwebproxy`, [networkservice, enabled]);
+    setsecurewebproxy(networkservice, domain, port, authenticated, username, password) {
+        return this.exec(`-setsecurewebproxy`, [networkservice, domain, port, authenticated, username, password]);
     }
-    setwebproxystate(networkservice, domain, port, authenticated, username, password) {
-        return this.exec(`-setwebproxy`, [networkservice, domain, port, authenticated, username, password]);
+    setwebproxystate(networkservice, enabled) {
+        return this.exec(`-setwebproxystate`, [networkservice, enabled]);
     }
     setsecurewebproxystate(networkservice, enabled) {
-        return this.exec(`-setwebproxy`, [networkservice, enabled]);
+        return this.exec(`-setsecurewebproxystate`, [networkservice, enabled]);
     }
     exec(command, params) {
         return new Promise((resolve, reject) => {
@@ -54,4 +54,3 @@ class NetworksetupProxy {
     }
 }
 exports.NetworksetupProxy = NetworksetupProxy;
-;

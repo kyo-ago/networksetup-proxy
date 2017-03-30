@@ -4,11 +4,11 @@ export declare type IOResult = Promise<{
 }>;
 export declare class NetworksetupProxy {
     private PROXY_SETTING_COMMAND;
-    grant(): IOResult;
-    hasGrant(): IOResult;
-    setwebproxy(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): IOResult;
-    setsecurewebproxy(networkservice: string, enabled: string): IOResult;
-    setwebproxystate(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): IOResult;
-    setsecurewebproxystate(networkservice: string, enabled: string): IOResult;
+    grant(): Promise<any>;
+    hasGrant(): Promise<boolean>;
+    setwebproxy(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): Promise<IOResult>;
+    setsecurewebproxy(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): Promise<IOResult>;
+    setwebproxystate(networkservice: string, enabled: string): Promise<IOResult>;
+    setsecurewebproxystate(networkservice: string, enabled: string): Promise<IOResult>;
     private exec(command, params);
 }

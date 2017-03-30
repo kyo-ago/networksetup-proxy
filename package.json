@@ -1,6 +1,6 @@
 {
   "name": "networksetup-proxy",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "@kyo_ago",
   "bugs": {
     "url": "https://github.com/kyo-ago/networksetup-proxy/issues"
@@ -22,7 +22,7 @@
     "url": "git+https://github.com/kyo-ago/networksetup-proxy.git"
   },
   "scripts": {
-    "build": "cd ./rust/ && rm -f proxy-setting && rustc proxy-setting.rs",
+    "build": "tsc -p ./tsconfig.json",
     "grant": "chmod 4755 ./rust/proxy-setting && sudo chown 0:0 ./rust/proxy-setting",
     "rust-build": "rustc -o ./rust/proxy-setting ./rust/proxy-setting.rs",
     "rust-install": "curl -sSf https://static.rust-lang.org/rustup.sh | sh"

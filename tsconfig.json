@@ -9,7 +9,8 @@
   },
   "include": [
     "./global.d.ts",
-    "./index.ts"
+    "./index.ts",
+    "./test/test.ts"
   ],
   "exclude": [
     "./node_modules/"

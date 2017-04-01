@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import {exec} from "child_process";
+import execa from "execa";
 import Sudoer from "electron-sudo";
 
 export type IOResult = Promise<{
@@ -45,13 +45,7 @@ export class NetworksetupProxy {
         return this.exec(`-setsecurewebproxystate`, [networkservice, enabled]);
     }
     private exec(command: string, params: string[]): Promise<IOResult> {
-        return new Promise((resolve, reject) => {
-            exec(`${command} ${params.join(' ')}`, (error, stdout, stderr) => {
-                if (error && !stderr) {
-                    return reject(error);
-                }
-                resolve({stdout, stderr});
-            });
-        });
+        params.unshift(command);
+        return execa(this.PROXY_SETTING_COMMAND, params);
     }
 }

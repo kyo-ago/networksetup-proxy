@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from "path";
 import execa from "execa";
 import Sudoer from "electron-sudo";
 
@@ -8,7 +9,7 @@ export type IOResult = Promise<{
 }>;
 
 export class NetworksetupProxy {
-    constructor(private PROXY_SETTING_COMMAND = `./rust/proxy-setting`) {
+    constructor(private PROXY_SETTING_COMMAND = path.join(__dirname, `./rust/proxy-setting`)) {
     }
     grant(): Promise<any> {
         return new Promise((resolve, reject) => {

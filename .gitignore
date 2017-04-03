@@ -1,7 +1,5 @@
 rust/proxy-setting
-index.d.ts
-index.js
+/index.d.ts
+/index.js
 .idea
-test/**/*.d.ts
-test/**/*.js
 node_modules/

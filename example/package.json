@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "example": "npm install && node index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "@kyo_ago",
+  "license": "GPL-3.0",
   "devDependencies": {
-    "networksetup-proxy": "file:///Users/kyo/projects/networksetup-proxy"
+    "networksetup-proxy": "file:.."
   }
 }

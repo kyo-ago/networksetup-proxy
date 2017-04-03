@@ -3,4 +3,4 @@ index.ts
 global.d.ts
 tsconfig.json
 yarn.lock
-test/
+example/

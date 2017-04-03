@@ -8,7 +8,8 @@ export type IOResult = Promise<{
 }>;
 
 export class NetworksetupProxy {
-    private PROXY_SETTING_COMMAND = `./rust/proxy-setting`;
+    constructor(private PROXY_SETTING_COMMAND = `./rust/proxy-setting`) {
+    }
     grant(): Promise<any> {
         return new Promise((resolve, reject) => {
             fs.chmod(this.PROXY_SETTING_COMMAND, `4755`, (err) => {

@@ -34,7 +34,6 @@
     "grant": "chmod 4755 ./rust/proxy-setting && sudo chown 0:0 ./rust/proxy-setting",
     "rust-build": "rustc -o ./rust/proxy-setting ./rust/proxy-setting.rs",
     "rust-install": "curl -sSf https://static.rust-lang.org/rustup.sh | sh",
-    "pretest": "npm run build",
-    "test": "(cd example && npm install && npm test)"
+    "test": "npm run build && (cd example && npm i -D ../ && npm run example)"
   }
 }

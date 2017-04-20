@@ -1,13 +1,13 @@
 {
   "name": "networksetup-proxy",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "@kyo_ago",
   "bugs": {
     "url": "https://github.com/kyo-ago/networksetup-proxy/issues"
   },
   "dependencies": {
-    "electron-sudo": "^4.0.12",
-    "execa": "^0.6.3"
+    "execa": "^0.6.3",
+    "sudo-prompt": "^7.0.0"
   },
   "devDependencies": {
     "@types/node": "^7.0.11",

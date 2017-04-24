@@ -18,7 +18,7 @@ export class NetworksetupProxy {
                     return reject(err);
                 }
 
-                let command = `chown 0:0 ${this.PROXY_SETTING_COMMAND}`;
+                let command = `chown 0:0 "${this.PROXY_SETTING_COMMAND}"`;
                 sudo.exec(command, {
                     name: 'electron sudo application'
                 }, (err: string, stdout: string, stderr: string) => {

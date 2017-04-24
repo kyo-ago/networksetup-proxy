@@ -8,7 +8,9 @@
   },
   "author": "@kyo_ago",
   "license": "GPL-3.0",
-  "devDependencies": {
-    "networksetup-proxy": "file:.."
+  "dependencies": {
+    "mock-require": "^2.0.2",
+    "networksetup-proxy": "file:..",
+    "sinon": "^2.1.0"
   }
 }

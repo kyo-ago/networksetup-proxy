@@ -11,7 +11,8 @@ export type IOResult = Promise<{
 export class NetworksetupProxy {
     constructor(private PROXY_SETTING_COMMAND = path.join(__dirname, `./rust/proxy-setting`)) {
     }
-    grant(): IOResult {
+
+    grant(): Promise<IOResult> {
         return new Promise((resolve, reject) => {
             fs.chmod(this.PROXY_SETTING_COMMAND, `4755`, (err) => {
                 if (err) {

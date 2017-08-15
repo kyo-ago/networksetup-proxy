@@ -1,16 +1,17 @@
 {
   "name": "networksetup-proxy",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "author": "@kyo_ago",
   "bugs": {
     "url": "https://github.com/kyo-ago/networksetup-proxy/issues"
   },
   "dependencies": {
-    "execa": "^0.6.3",
+    "execa": "^0.8.0",
     "sudo-prompt": "^7.0.0"
   },
   "devDependencies": {
-    "@types/node": "^7.0.11",
+    "@types/execa": "^0.7.0",
+    "@types/node": "^8.0.22",
     "fixpack": "^2.3.1",
     "typescript": "^2.2.1"
   },
@@ -30,9 +31,9 @@
     "url": "git+https://github.com/kyo-ago/networksetup-proxy.git"
   },
   "scripts": {
-    "prepublish": "npm run build",
     "build": "tsc -p ./tsconfig.json",
     "grant": "chmod 4755 ./rust/proxy-setting && sudo chown 0:0 ./rust/proxy-setting",
+    "prepublish": "npm run build",
     "rust-build": "rustc -o ./rust/proxy-setting ./rust/proxy-setting.rs",
     "rust-install": "curl -sSf https://static.rust-lang.org/rustup.sh | sh",
     "test": "npm run build && (cd example && npm i ../ && npm run example)"

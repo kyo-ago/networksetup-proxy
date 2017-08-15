@@ -1,15 +1,18 @@
 import * as fs from "fs";
 import * as path from "path";
-import execa from "execa";
+import * as execa from "execa";
 import * as sudo from "sudo-prompt";
 
-export type IOResult = Promise<{
+export type IOResult = {
     stdout: string;
     stderr: string;
-}>;
+};
 
 export class NetworksetupProxy {
-    constructor(private PROXY_SETTING_COMMAND = path.join(__dirname, `./rust/proxy-setting`)) {
+    constructor(
+        private sudoApplicationName: string = 'electron sudo application',
+        private PROXY_SETTING_COMMAND = path.join(__dirname, `./rust/proxy-setting`),
+    ) {
     }
 
     grant(): Promise<IOResult> {
@@ -21,7 +24,7 @@ export class NetworksetupProxy {
 
                 let command = `chown 0:0 "${this.PROXY_SETTING_COMMAND}"`;
                 sudo.exec(command, {
-                    name: 'electron sudo application'
+                    name: this.sudoApplicationName,
                 }, (err: string, stdout: string, stderr: string) => {
                     if (err) {
                         return reject(err);
@@ -31,6 +34,7 @@ export class NetworksetupProxy {
             });
         });
     }
+
     hasGrant(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             fs.stat(this.PROXY_SETTING_COMMAND, (err, stats) => {
@@ -41,19 +45,47 @@ export class NetworksetupProxy {
             });
         });
     }
-    setwebproxy(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): IOResult {
+
+    setwebproxy(
+        networkservice: string,
+        domain: string,
+        port?: string,
+        authenticated?: string,
+        username?: string,
+        password?: string,
+    ): Promise<IOResult> {
         return this.exec(`-setwebproxy`, [networkservice, domain, port, authenticated, username, password]);
     }
-    setsecurewebproxy(networkservice: string, domain: string, port?: string, authenticated?: string, username?: string, password?: string): IOResult {
+
+    setsecurewebproxy(
+        networkservice: string,
+        domain: string,
+        port?: string,
+        authenticated?: string,
+        username?: string,
+        password?: string,
+    ): Promise<IOResult> {
         return this.exec(`-setsecurewebproxy`, [networkservice, domain, port, authenticated, username, password]);
     }
-    setwebproxystate(networkservice: string, enabled: string): IOResult {
+
+    setwebproxystate(
+        networkservice: string,
+        enabled: string,
+    ): Promise<IOResult> {
         return this.exec(`-setwebproxystate`, [networkservice, enabled]);
     }
-    setsecurewebproxystate(networkservice: string, enabled: string): IOResult {
+
+    setsecurewebproxystate(
+        networkservice: string,
+        enabled: string,
+    ): Promise<IOResult> {
         return this.exec(`-setsecurewebproxystate`, [networkservice, enabled]);
     }
-    private exec(command: string, params: string[]): IOResult {
+
+    private exec(
+        command: string,
+        params: string[],
+    ): Promise<IOResult> {
         params.unshift(command);
         return execa(this.PROXY_SETTING_COMMAND, params);
     }

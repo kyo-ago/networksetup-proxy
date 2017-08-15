@@ -3,10 +3,19 @@ import * as path from "path";
 import * as execa from "execa";
 import * as sudo from "sudo-prompt";
 
+const promisify = require("es6-promisify");
+
 export type IOResult = {
     stdout: string;
     stderr: string;
 };
+
+const promisedFsChmod = promisify(fs.chmod, fs);
+const promisedFsStat = promisify(fs.stat, fs);
+const promisedSudoExec = promisify(sudo.exec, {
+    thisArg: sudo,
+    multiArgs: true,
+});
 
 export class NetworksetupProxy {
     constructor(
@@ -15,35 +24,20 @@ export class NetworksetupProxy {
     ) {
     }
 
-    grant(): Promise<IOResult> {
-        return new Promise((resolve, reject) => {
-            fs.chmod(this.PROXY_SETTING_COMMAND, `4755`, (err) => {
-                if (err) {
-                    return reject(err);
-                }
-
-                let command = `chown 0:0 "${this.PROXY_SETTING_COMMAND}"`;
-                sudo.exec(command, {
-                    name: this.sudoApplicationName,
-                }, (err: string, stdout: string, stderr: string) => {
-                    if (err) {
-                        return reject(err);
-                    }
-                    resolve({stdout, stderr});
-                });
-            });
-        });
+    async grant(): Promise<IOResult> {
+        await promisedFsChmod(this.PROXY_SETTING_COMMAND, `4755`);
+        let [stdout, stderr]: string[] = await promisedSudoExec(
+            `chown 0:0 "${this.PROXY_SETTING_COMMAND}"`,
+            {
+                name: this.sudoApplicationName,
+            }
+        );
+        return {stdout, stderr};
     }
 
-    hasGrant(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            fs.stat(this.PROXY_SETTING_COMMAND, (err, stats) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(Number(stats.uid) === 0);
-            });
-        });
+    async hasGrant(): Promise<boolean> {
+        let stats = await promisedFsStat(this.PROXY_SETTING_COMMAND);
+        return Number(stats.uid) === 0;
     }
 
     setwebproxy(

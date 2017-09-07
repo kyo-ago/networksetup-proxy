@@ -81,6 +81,6 @@ export class NetworksetupProxy {
         params: string[],
     ): Promise<IOResult> {
         params.unshift(command);
-        return execa.shell(`${this.PROXY_SETTING_COMMAND} "${params.join('" "').replace(/["\\]/g, '\\$&')}"`);
+        return execa.shell(`${this.PROXY_SETTING_COMMAND} "${params.map((param) => param.replace(/["\\]/g, '\\$&')).join('" "')}"`);
     }
 }

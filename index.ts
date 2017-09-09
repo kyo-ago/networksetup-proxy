@@ -1,6 +1,7 @@
+import * as execa from "execa";
 import * as fs from "fs";
 import * as path from "path";
-import * as execa from "execa";
+import * as Mode from "stat-mode";
 import * as sudo from "sudo-prompt";
 
 const promisify = require("es6-promisify");
@@ -10,7 +11,6 @@ export type IOResult = {
     stderr: string;
 };
 
-const promisedFsChmod = promisify(fs.chmod, fs);
 const promisedFsStat = promisify(fs.stat, fs);
 const promisedSudoExec = promisify(sudo.exec, {
     thisArg: sudo,
@@ -25,9 +25,8 @@ export class NetworksetupProxy {
     }
 
     async grant(): Promise<IOResult> {
-        await promisedFsChmod(this.PROXY_SETTING_COMMAND, `4755`);
         let [stdout, stderr]: string[] = await promisedSudoExec(
-            `chown 0:0 "${this.PROXY_SETTING_COMMAND}"`,
+            `chown 0:0 "${this.PROXY_SETTING_COMMAND}" && chmod 4755 "${this.PROXY_SETTING_COMMAND}"`,
             {
                 name: this.sudoApplicationName,
             }
@@ -36,8 +35,11 @@ export class NetworksetupProxy {
     }
 
     async hasGrant(): Promise<boolean> {
-        let stats = await promisedFsStat(this.PROXY_SETTING_COMMAND);
-        return Number(stats.uid) === 0;
+        let stat = await promisedFsStat(this.PROXY_SETTING_COMMAND);
+        let mode = new Mode(stat);
+        if (Number(stat.uid) !== 0) return false;
+        if (mode.toOctal() !== '4755') return false;
+        return true;
     }
 
     setwebproxy(

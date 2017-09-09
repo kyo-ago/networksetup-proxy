@@ -1,6 +1,6 @@
 {
   "name": "networksetup-proxy",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "author": "@kyo_ago",
   "bugs": {
     "url": "https://github.com/kyo-ago/networksetup-proxy/issues"
@@ -8,11 +8,13 @@
   "dependencies": {
     "es6-promisify": "^5.0.0",
     "execa": "^0.8.0",
+    "stat-mode": "^0.2.2",
     "sudo-prompt": "^7.1.1"
   },
   "devDependencies": {
     "@types/execa": "^0.7.0",
     "@types/node": "^8.0.22",
+    "@types/stat-mode": "^0.2.0",
     "fixpack": "^2.3.1",
     "typescript": "^2.2.1"
   },
@@ -33,7 +35,7 @@
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
-    "grant": "chmod 4755 ./rust/proxy-setting && sudo chown 0:0 ./rust/proxy-setting",
+    "grant": "sudo chown 0:0 ./rust/proxy-setting && sudo chmod 4755 ./rust/proxy-setting",
     "prepublish": "npm run build",
     "rust-build": "rustc -o ./rust/proxy-setting ./rust/proxy-setting.rs",
     "rust-install": "curl -sSf https://static.rust-lang.org/rustup.sh | sh",

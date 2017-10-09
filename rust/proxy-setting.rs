@@ -11,7 +11,7 @@ fn main() {
     let param = args.next().unwrap();
 
     match param.as_ref() {
-        "-setwebproxy" | "-setsecurewebproxy" | "-setwebproxystate" | "-setsecurewebproxystate" => (),
+        "-setwebproxy" | "-setsecurewebproxy" | "-setwebproxystate" | "-setsecurewebproxystate" | "-setproxybypassdomains" | "-setautoproxyurl" | "-setautoproxystate" => (),
         _ => panic!("Unknown parameter: {}", param),
     }
 

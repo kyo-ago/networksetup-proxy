@@ -78,6 +78,27 @@ export class NetworksetupProxy {
         return this.exec(`-setsecurewebproxystate`, [networkservice, enabled]);
     }
 
+    setproxybypassdomains(
+        networkservice: string,
+        domains: string[],
+    ): Promise<IOResult> {
+        return this.exec(`-setproxybypassdomains`, [networkservice].concat(domains));
+    }
+
+    setautoproxyurl(
+        networkservice: string,
+        url: string,
+    ): Promise<IOResult> {
+        return this.exec(`-setautoproxyurl`, [networkservice, url]);
+    }
+
+    setautoproxystate(
+        networkservice: string,
+        enabled: string,
+    ): Promise<IOResult> {
+        return this.exec(`-setautoproxystate`, [networkservice, enabled]);
+    }
+
     private exec(
         command: string,
         params: string[],

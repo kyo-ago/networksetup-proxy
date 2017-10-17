@@ -108,7 +108,7 @@ export class NetworksetupProxy {
             this.PROXY_SETTING_COMMAND,
             params
                 .filter((param) => param)
-                .map((param) => param.match(/\s/) ? `"${param}"` : param)
+                .map((param) => param.match(/\W/) ? `"${param}"` : param)
         );
     }
 }

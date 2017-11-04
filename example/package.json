@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "example": "npm install && node index.js"
+    "example": "npm install && node index.js",
+    "postexample": "node postexample.js"
   },
   "author": "@kyo_ago",
   "license": "GPL-3.0",

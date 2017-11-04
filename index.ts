@@ -50,7 +50,8 @@ export class NetworksetupProxy {
         username?: string,
         password?: string,
     ): Promise<IOResult> {
-        return this.exec(`-setwebproxy`, [networkservice, domain, port, authenticated, username, password]);
+        let args = [port, authenticated, username, password].filter((arg) => arg);
+        return this.exec(`-setwebproxy`, [networkservice, domain].concat(args));
     }
 
     setsecurewebproxy(
@@ -61,7 +62,8 @@ export class NetworksetupProxy {
         username?: string,
         password?: string,
     ): Promise<IOResult> {
-        return this.exec(`-setsecurewebproxy`, [networkservice, domain, port, authenticated, username, password]);
+        let args = [port, authenticated, username, password].filter((arg) => arg);
+        return this.exec(`-setsecurewebproxy`, [networkservice, domain].concat(args));
     }
 
     setwebproxystate(
@@ -103,12 +105,20 @@ export class NetworksetupProxy {
         command: string,
         params: string[],
     ): Promise<IOResult> {
-        params.unshift(command);
         return execa(
             this.PROXY_SETTING_COMMAND,
-            params
-                .filter((param) => param)
-                .map((param) => param.match(/\W/) ? `"${param}"` : param)
+            [].concat(command).concat(this.getSscapedParams(params)),
         );
+    }
+
+    private getSscapedParams(
+        params: string[],
+    ): string[] {
+        return params
+            .map((param) => param || '')
+            .map((param) => param.replace(/[\\"]/g, '\\$&'))
+            .map((param) => param.match(/\W/) ? `"${param}"` : param)
+            .map((param) => param || '""')
+        ;
     }
 }
